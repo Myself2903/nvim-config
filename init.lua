@@ -816,24 +816,29 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
+    'olimorris/onedarkpro.nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
       ---@diagnostic disable-next-line: missing-fields
-      require('tokyonight').setup {
-        transparent = true,
+      require('onedarkpro').setup {
+        options = {
+          transparency = true,
+        },
         styles = {
-          comments = { italic = true }, -- Disable italics in comments
+          comments = 'italic',
+          keywords = 'italic, bold',
+          functions = 'bold,italic',
+          parameters = 'italic',
+          conditionals = 'italic',
+        },
+        highlights = {
+          ['@parameter'] = { fg = '#cf9763', italic = true },
         },
       }
 
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'onedark'
     end,
   },
-
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
@@ -875,11 +880,10 @@ require('lazy').setup({
 
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs',
-    branch = 'master',
-    opts = {
-      ensure_installed = {
+    config = function()
+      require('nvim-treesitter').install {
         'bash',
         'c',
         'diff',
@@ -897,16 +901,12 @@ require('lazy').setup({
         'tsx',
         'css',
         'scss',
-      },
-      auto_install = true,
-      highlight = {
-        enable = true,
-      },
-      indent = {
-        enable = true,
-      },
-    },
-    config = function(_, opts) require('nvim-treesitter.configs').setup(opts) end,
+      }
+
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function() pcall(vim.treesitter.start) end,
+      })
+    end,
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
