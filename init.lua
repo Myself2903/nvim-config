@@ -816,27 +816,26 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'olimorris/onedarkpro.nvim',
+    'catppuccin/nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
       ---@diagnostic disable-next-line: missing-fields
-      require('onedarkpro').setup {
-        options = {
-          transparency = true,
-        },
+      require('catppuccin').setup {
+        flavour = 'macchiato',
+        transparent_background = true,
         styles = {
-          comments = 'italic',
-          keywords = 'italic, bold',
-          functions = 'bold,italic',
-          parameters = 'italic',
-          conditionals = 'italic',
-        },
-        highlights = {
-          ['@parameter'] = { fg = '#cf9763', italic = true },
+          comments = { 'italic' },
+          keywords = { 'italic', 'bold' },
+          functions = { 'italic', 'bold' },
+          parameters = { 'italic' },
+          conditionals = { 'italic' },
         },
       }
 
-      vim.cmd.colorscheme 'onedark'
+      -- Load the colorscheme here.
+      -- Like many other themes, this one has different styles, and you could load
+      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+      vim.cmd.colorscheme 'catppuccin-nvim'
     end,
   },
   -- Highlight todo, notes, etc in comments
